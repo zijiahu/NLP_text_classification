@@ -2,6 +2,7 @@ import csv
 import re
 import nltk
 import ssl
+import math
 from nltk.tokenize import sent_tokenize, word_tokenize
 
 filename = "500_Reddit_users_posts_labels.csv"
@@ -19,6 +20,9 @@ nltk.download('punkt')
 # { user_id, {word, occurrence} }
 users = {}
 user = {}
+all_words = []
+vectors = {}
+vector = {}
 total_posts = 0
 
 stop_words = ['a','the','an','and','or','but','about','above','after','along','amid','among',\
@@ -59,6 +63,9 @@ with open(filename) as f:
 
         for word in m:
             if word in stop_words: continue
+
+            if word not in all_words: all_words.append(word)
+
             if word not in user:
                 user[word] = 1
             else:
@@ -75,10 +82,16 @@ for user in users:
     # for each word in the post of user-id:
     for word in users[user]:
         # find NumberOfDocumentsContaining(word)
-
+        occurrence = 0 # number of documents containing word
+        for u in users:
+            if user != u and word in users[u]:
+                occurrence += 1
+        
         # calculate the natural log of ( total_posts/NumberOfDocumentsContaining(word) )
+        idf = math.log(total_posts/occurrence)
+        tf = user[word]
+        # print(idf)
  
 
-    
 
 
