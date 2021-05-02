@@ -20,7 +20,8 @@ nltk.download('punkt')
 # { user_id, {word, occurrence} }
 users = {}
 user = {}
-all_words = []
+all_words = [] # all valid words
+# { user_id, {word, tfidf score} }
 vectors = {}
 vector = {}
 total_posts = 0
@@ -90,7 +91,17 @@ for user in users:
         # calculate the natural log of ( total_posts/NumberOfDocumentsContaining(word) )
         idf = math.log(total_posts/occurrence)
         tf = user[word]
-        # print(idf)
+        tfidf = idf * tf
+        user[word] = tfidf
+
+    for w in all_words:
+        if w in users[user]:
+            vector[w] = user[w]
+        else:
+            vector[w] = 0
+    vectors[user] = vector
+    vector = {}
+
  
 
 
