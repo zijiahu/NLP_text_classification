@@ -90,17 +90,21 @@ for user in users:
         
         # calculate the natural log of ( total_posts/NumberOfDocumentsContaining(word) )
         idf = math.log(total_posts/occurrence)
-        tf = user[word]
+        tf = users[user][word]
         tfidf = idf * tf
-        user[word] = tfidf
+        users[user][word] = tfidf
 
     for w in all_words:
         if w in users[user]:
-            vector[w] = user[w]
+            vector[w] = users[user][w]
         else:
             vector[w] = 0
     vectors[user] = vector
     vector = {}
+
+for vector in vectors:
+    for word in vectors[vector]:
+        print(vector, ": ", word , ": ", vectors[vector][word])
 
  
 
