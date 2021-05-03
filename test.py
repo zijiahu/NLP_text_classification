@@ -1,21 +1,18 @@
 import csv
 import re
 import nltk
-import ssl
 import math
 from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.corpus import stopwords
+from autocorrect_spelling import *
 
 filename = "500_Reddit_users_posts_labels.csv"
-
-# try:
-#     _create_unverified_https_context = ssl._create_unverified_context
-# except AttributeError:
-#     pass
-# else:
-#     ssl._create_default_https_context = _create_unverified_https_context
-
+nltk.download('stopwords')
 nltk.download('wordnet')
 nltk.download('punkt')
+
+# stop_words = set(stopwords.words("english"))
+# print(stop_words)
 
 # { user_id, {word, occurrence} }
 users = {}
@@ -52,25 +49,41 @@ stop_words = ['a','the','an','and','or','but','about','above','after','along','a
 
 with open(filename) as f:
     reader = csv.reader(f)
-    next(reader) # skip the first row
+    next(reader) # skip the first row (header)
+
     for row in reader:
         user_id = row[0]
         post = row[1]
         label = row[2]
         total_posts += 1
+        user = {}
         
         p = re.compile("[a-zA-Z]+")
+        # p = re.compile("([a-z]+)|([A-Z]{1}[a-z]*)")
         m = p.findall(post)
 
         for word in m:
-            if word in stop_words: continue
+            # check if this word is misspelled
+            word = autocorrect_misspelling(word)
 
-            if word not in all_words: all_words.append(word)
+            # if this word is multiple words joined together, split it
+            result = viterbi_segment(word.lower())
+            for w in result:
+                if w in stop_words: continue
+                if w not in all_words: all_words.append(w)
+                if w not in user:
+                    user[w] = 1
+                else:
+                    user[w] += 1
 
-            if word not in user:
-                user[word] = 1
-            else:
-                user[word] += 1
+            # if word in stop_words: continue
+
+            # if word not in all_words: all_words.append(word)
+
+            # if word not in user:
+            #     user[word] = 1
+            # else:
+            #     user[word] += 1
             # print(word , ': ' , user[word])
         
         users[user_id] = user # add the frequency of every word in user_id's post to users
