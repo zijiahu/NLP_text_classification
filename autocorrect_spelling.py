@@ -35,4 +35,4 @@ max_word_length = max(map(len, dictionary))
 total = float(sum(dictionary.values()))
 
 result = viterbi_segment('apple'.lower())
-print(len(result), type(result))
+# print(len(result), type(result))

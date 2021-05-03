@@ -4,7 +4,7 @@ import nltk
 import math
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
-from autocorrect_spelling import *
+from autocorrect_spelling import autocorrect_misspelling, viterbi_segment
 
 filename = "500_Reddit_users_posts_labels.csv"
 nltk.download('stopwords')
@@ -75,6 +75,7 @@ with open(filename) as f:
                     user[w] = 1
                 else:
                     user[w] += 1
+                print(w)
 
             # if word in stop_words: continue
 
