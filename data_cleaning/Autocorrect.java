@@ -1,14 +1,9 @@
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
