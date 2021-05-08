@@ -34,5 +34,6 @@ dictionary = Counter(words(open('big.txt').read()))  # 'big.txt' is from https:/
 max_word_length = max(map(len, dictionary))
 total = float(sum(dictionary.values()))
 
-result = viterbi_segment('apple'.lower())
-# print(len(result), type(result))
+result = viterbi_segment('supportiveOkay'.lower())
+print(result)
+print(autocorrect_misspelling("supportiveOkay"))

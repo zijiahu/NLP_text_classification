@@ -6,7 +6,8 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from autocorrect_spelling import autocorrect_misspelling, viterbi_segment
 
-filename = "500_Reddit_users_posts_labels.csv"
+# filename = "500_Reddit_users_posts_labels.csv"
+filename = "Reddit_Cleaned.csv"
 nltk.download('stopwords')
 nltk.download('wordnet')
 nltk.download('punkt')
@@ -53,39 +54,22 @@ with open(filename) as f:
 
     for row in reader:
         user_id = row[0]
-        post = row[1]
+        post = row[1].lower()
         label = row[2]
         total_posts += 1
         user = {}
         
-        p = re.compile("[a-zA-Z]+")
-        # p = re.compile("([a-z]+)|([A-Z]{1}[a-z]*)")
+        p = re.compile("[a-z]+")
         m = p.findall(post)
 
         for word in m:
-            # check if this word is misspelled
-            word = autocorrect_misspelling(word)
-
-            # if this word is multiple words joined together, split it
-            result = viterbi_segment(word.lower())
-            for w in result:
-                if w in stop_words: continue
-                if w not in all_words: all_words.append(w)
-                if w not in user:
-                    user[w] = 1
-                else:
-                    user[w] += 1
-                print(w)
-
-            # if word in stop_words: continue
-
-            # if word not in all_words: all_words.append(word)
-
-            # if word not in user:
-            #     user[word] = 1
-            # else:
-            #     user[word] += 1
-            # print(word , ': ' , user[word])
+            if word in stop_words: continue
+            if word not in all_words: all_words.append(word)
+            if word not in user:
+                user[word] = 1
+            else:
+                user[word] += 1
+            # print(word)
         
         users[user_id] = user # add the frequency of every word in user_id's post to users
 
@@ -97,7 +81,7 @@ for user in users:
     # for each word in the post of user-id:
     for word in users[user]:
         # find NumberOfDocumentsContaining(word)
-        occurrence = 0 # number of documents containing word
+        occurrence = 1 # number of documents containing word
         for u in users:
             if user != u and word in users[u]:
                 occurrence += 1
