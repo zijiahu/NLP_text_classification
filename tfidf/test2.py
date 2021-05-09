@@ -15,8 +15,14 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, classification_report, confusion_matrix, accuracy_score
 from sklearn.pipeline import Pipeline
+from autocorrect_spelling import autocorrect_misspelling, viterbi_segment
+
+from sklearn.datasets import make_blobs  # new 
+
 
 np.random.seed(500)
+
+allwords = []
 
 stop_words = ['a','the','an','and','or','but','about','above','after','along','amid','among',\
             'as','at','by','for','from','in','into','like','minus','near','of','off','on',\
@@ -60,6 +66,22 @@ for chunk in df:
     chunk['post'] = [entry.lower() for entry in chunk['post']]
     # tokenization
     chunk['post'] =  [word_tokenize(entry) for entry in chunk['post']]
+    
+    # separate multi-joined words
+    new_post = []
+    for entry in chunk['post']:
+        new_entry = []
+        for word in entry:
+            if word not in allwords:
+                result = viterbi_segment(word)
+                for w in result :
+                    new_entry.append(w)
+                    allwords.append(w)
+            else:
+                new_entry.append(word)
+        new_post.append(new_entry)
+    chunk['post'] = new_post
+
     # stop words
     chunk['post'] = chunk['post'].apply(lambda x: [item for item in x if item not in stop_words])
 
@@ -67,7 +89,7 @@ for chunk in df:
     header = False
 
 Corpus = pd.read_csv("final.csv", index_col=0)
-Corpus = Corpus.dropna();
+Corpus = Corpus.dropna()
 # Corpus = Corpus.drop("user_id", axis=0)
 
 # prepare train and test data set
