@@ -3,9 +3,11 @@ Data cleaning is performed in New York University’s Peel node cluster, specifi
 
 ### Transfering files
 * transfering file from local machine to Peel cluster
+
 	`scp -r /Users/huzijia/Desktop/reddit zh1130@peel.hpc.nyu.edu:~/`
 
 * transfer file from Peel cluster to HDFS
+
 	`hdfs dfs -put /home/zh1130/reddit /user/zh1130`
 
 ### Preparation
