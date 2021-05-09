@@ -38,10 +38,13 @@ stop_words = ['a','the','an','and','or','but','about','above','after','along','a
             'everyone', 'everyplace', 'everything', 'everywhere', 'whatever',\
             'whenever', 'whereever', 'whichever', 'whoever', 'whomever' 'he',\
             'him', 'his', 'her', 'she', 'it', 'they', 'them', 'its', 'their','theirs',\
-            'you','your','yours','me','my','mine','I','we','us','much','and/or'
+            'you','your','yours','me','my','mine','I','we','us','much','and/or',
+            'youre', 'i', 'youll', 'theyre', 'theyd', 'theyve', 'doesnt', 'wont',\
+            'isnt', 'Im'
             ]
 
-df = pd.read_csv("500_Reddit_users_posts_labels.csv", skiprows=1, header=None, chunksize=10000)
+# df = pd.read_csv("500_Reddit_users_posts_labels.csv", skiprows=1, header=None, chunksize=10000)
+df = pd.read_csv("Reddit_Cleaned.csv", skiprows=1, header=None, chunksize=10000)
 
 header = True
 for chunk in df:
@@ -95,7 +98,7 @@ print("SVM Accuracy Score:", accuracy_score(predictions_SVM, Test_Y)*100)
 print("SVM f1_score:", f1_score(predictions_SVM, Test_Y, average="macro"))
 print("SVM Precision score:", precision_score(predictions_SVM, Test_Y, average="macro"))
 print("SVM Recall score:", recall_score(predictions_SVM, Test_Y, average="macro"))
-s
+
 ## Naive Bayes
 # fit the training dataset on the NB classifier
 Naive = naive_bayes.MultinomialNB()

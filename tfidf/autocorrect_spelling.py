@@ -19,8 +19,8 @@ def viterbi_segment(text):
     for i in range(1, len(text) + 1):
         prob_k, k = max((probs[j] * word_prob(text[j:i]), j)
                         for j in range(max(0, i - max_word_length), i))
-        print("prob_k: " , prob_k)
-        print("k: " , k)
+        # print("prob_k: " , prob_k)
+        # print("k: " , k)
         probs.append(prob_k)
         lasts.append(k)
     words = []
@@ -45,4 +45,4 @@ total = float(sum(dictionary.values()))
 
 result = viterbi_segment('supportiveOkay'.lower())
 print(result)
-print(autocorrect_misspelling("supportiveOkay"))
+print(autocorrect_misspelling("thnking"))
