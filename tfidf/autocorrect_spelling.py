@@ -2,6 +2,8 @@ import autocorrect
 import re
 from collections import Counter
 from autocorrect import Speller
+import os
+
 
 def autocorrect_misspelling(word):
     spell = Speller()
@@ -17,6 +19,8 @@ def viterbi_segment(text):
     for i in range(1, len(text) + 1):
         prob_k, k = max((probs[j] * word_prob(text[j:i]), j)
                         for j in range(max(0, i - max_word_length), i))
+        print("prob_k: " , prob_k)
+        print("k: " , k)
         probs.append(prob_k)
         lasts.append(k)
     words = []
@@ -30,7 +34,12 @@ def viterbi_segment(text):
 
 def word_prob(word): return dictionary[word] / total
 def words(text): return re.findall('[a-z]+', text.lower()) 
-dictionary = Counter(words(open('big.txt').read()))  # 'big.txt' is from https://norvig.com/big.txt
+
+cwd = os.getcwd()  # Get the current working directory (cwd)
+files = os.listdir(cwd)  # Get all the files in that directory
+print("Files in %r: %s" % (cwd, files))
+
+dictionary = Counter(words(open('./big.txt').read()))  # 'big.txt' is from https://norvig.com/big.txt
 max_word_length = max(map(len, dictionary))
 total = float(sum(dictionary.values()))
 
